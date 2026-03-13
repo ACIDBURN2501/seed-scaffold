@@ -4,12 +4,9 @@
 
 ## Features
 
-- Meson-based C11 static library template
-- Optional unit test scaffold
-- Generated version header
-- `pkg-config` metadata generation
-- GitHub Actions CI workflow
-- `.clang-format` and MIT license included
+_Add a short list of the projects feature here_
+
+- **<Topic>**: <description>
 
 ## Using the Library
 
@@ -55,15 +52,22 @@ meson compile -C build
 meson test -C build --verbose
 ```
 
-## Layout
+## Quick Start
 
-- `include/` public headers
-- `src/` library sources
-- `tests/` unit tests
-- `config/` generated header templates
+_Add a code snippet for a quick start use for the project_
 
-## Next Steps
+## API Reference
 
-- Flesh out the public API in `include/{{PROJECT_SLUG}}.h`
-- Implement library behavior in `src/{{PROJECT_SLUG}}.c`
-- Replace the example unit test with real test coverage
+_Add the API reference here_
+
+## Use Cases
+
+_Add a small list of use case examples_
+
+- **<Topic>**: <description>
+
+## Notes
+
+| Topic | Note |
+|-------|------|
+| **<Topic>** | <description> |
