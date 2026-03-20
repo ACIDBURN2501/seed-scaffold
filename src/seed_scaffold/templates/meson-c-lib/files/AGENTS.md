@@ -51,6 +51,7 @@ meson test -C build --verbose
 - Match the conventions in the existing files.
 - Keep public headers minimal and stable.
 - Prefer explicit fixed-width integer types when ABI or serialization matters.
+- Use `{{PROJECT_SLUG}}_conf.h` for compile-time configuration options. This header is automatically included by `{{PROJECT_SLUG}}.h` and can be overridden before including the main header.
 
 ### Testing
 

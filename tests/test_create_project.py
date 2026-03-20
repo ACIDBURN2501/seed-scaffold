@@ -91,9 +91,7 @@ class CreateProjectTests(unittest.TestCase):
             )
 
             self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertTrue(
-                (output_dir / "include" / "demo_library.h").is_file()
-            )
+            self.assertTrue((output_dir / "include" / "demo_library.h").is_file())
 
     def test_dry_run_does_not_write_files(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -163,6 +161,7 @@ class CreateProjectTests(unittest.TestCase):
                 output_dir / "README.md",
                 output_dir / "meson.build",
                 output_dir / "include" / "sample_library.h",
+                output_dir / "include" / "sample_library_conf.h",
                 output_dir / "src" / "sample_library.c",
                 output_dir / "tests" / "test_sample_library.c",
             ]
@@ -172,12 +171,8 @@ class CreateProjectTests(unittest.TestCase):
                 )
 
             license_text = (output_dir / "LICENSE").read_text(encoding="utf-8")
-            readme_text = (output_dir / "README.md").read_text(
-                encoding="utf-8"
-            )
-            meson_text = (output_dir / "meson.build").read_text(
-                encoding="utf-8"
-            )
+            readme_text = (output_dir / "README.md").read_text(encoding="utf-8")
+            meson_text = (output_dir / "meson.build").read_text(encoding="utf-8")
 
             self.assertIn("Jane Developer", license_text)
             self.assertIn("2035", license_text)
@@ -185,9 +180,14 @@ class CreateProjectTests(unittest.TestCase):
             self.assertNotIn("USERNAME/REPO", readme_text)
             self.assertIn("'sample_library'", meson_text)
             self.assertIn("version: '1.2.3'", meson_text)
-            self.assertIn(
-                "meson.override_dependency('sample_library'", meson_text
+            self.assertIn("meson.override_dependency('sample_library'", meson_text)
+
+            # Verify configuration header was generated
+            conf_header = (output_dir / "include" / "sample_library_conf.h").read_text(
+                encoding="utf-8"
             )
+            self.assertIn("SAMPLE_LIBRARY_MAX", conf_header)
+            self.assertIn("SAMPLE_LIBRARY_MIN", conf_header)
 
     @unittest.skipUnless(shutil.which("git"), "git is required for this test")
     def test_init_git_creates_repository(self) -> None:
@@ -227,9 +227,7 @@ class CreateProjectTests(unittest.TestCase):
                 "--output",
                 str(output_dir),
             )
-            self.assertEqual(
-                generate_result.returncode, 0, generate_result.stderr
-            )
+            self.assertEqual(generate_result.returncode, 0, generate_result.stderr)
 
             commands = [
                 [

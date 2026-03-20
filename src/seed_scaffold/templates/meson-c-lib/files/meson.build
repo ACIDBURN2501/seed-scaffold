@@ -42,7 +42,11 @@ __PROJECT_SLUG___lib = static_library(
   install: true,
 )
 
-install_headers('include/{{PROJECT_SLUG}}.h', subdir: '{{PROJECT_SLUG}}')
+install_headers(
+  'include/{{PROJECT_SLUG}}.h',
+  'include/{{PROJECT_SLUG}}_conf.h',
+  subdir: '{{PROJECT_SLUG}}'
+)
 
 __PROJECT_SLUG___dep = declare_dependency(
   include_directories: [public_headers, generated_headers],
