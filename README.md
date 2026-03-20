@@ -11,6 +11,7 @@ Reusable project scaffolding for small, opinionated starter templates.
 - Safe output handling with `--dry-run` and `--force`
 - Metadata injection for author and copyright year
 - Optional git repository initialization
+- User configuration file support at `~/.config/see-scaffold/user.conf`
 - End-to-end tests that validate generated projects build with Meson
 
 ## Installation
@@ -79,6 +80,21 @@ seed-scaffold \
     --description "Dry-run example" \
     --dry-run
 ```
+
+## User Configuration
+
+You can store default values for frequently used arguments in a configuration file at `~/.config/seed-scaffold/user.conf`. This allows you to avoid specifying common arguments like `--author` and `--year` on every command.
+
+Example configuration:
+
+```toml
+[defaults]
+author = "Your Name"
+year = 2024
+template = "meson-c-lib"
+```
+
+For more information, see [`docs/USER_CONFIG.md`](docs/USER_CONFIG.md).
 
 ## Arguments
 

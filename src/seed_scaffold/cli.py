@@ -13,6 +13,8 @@ from datetime import date
 from pathlib import Path
 from typing import Any, NoReturn, Sequence
 
+from seed_scaffold.config import load_config
+
 VERSION_RE = re.compile(r"^\d+\.\d+\.\d+$")
 SLUG_RE = re.compile(r"^[a-z][a-z0-9_]*$")
 DEFAULT_TEMPLATE = "meson-c-lib"
@@ -366,9 +368,35 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     """Parse command line arguments."""
     templates = discover_templates()
     parser = create_parser(templates)
+    
+    # Load configuration and apply defaults
+    config = load_config()
+    apply_config_defaults(parser, config)
+    
     args = parser.parse_args(argv)
     args.templates = templates
     return args
+
+
+def apply_config_defaults(parser: argparse.ArgumentParser, config: dict[str, Any]) -> None:
+    """Apply configuration defaults to the argument parser."""
+    if not config:
+        return
+    
+    # Get defaults section from config
+    defaults = config.get("defaults", {})
+    
+    # Apply author default
+    if "author" in defaults:
+        parser.set_defaults(author=defaults["author"])
+    
+    # Apply year default
+    if "year" in defaults:
+        parser.set_defaults(year=defaults["year"])
+    
+    # Apply template default
+    if "template" in defaults:
+        parser.set_defaults(template=defaults["template"])
 
 
 def main(argv: Sequence[str] | None = None) -> int:
