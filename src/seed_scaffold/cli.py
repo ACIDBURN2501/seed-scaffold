@@ -368,32 +368,34 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     """Parse command line arguments."""
     templates = discover_templates()
     parser = create_parser(templates)
-    
+
     # Load configuration and apply defaults
     config = load_config()
     apply_config_defaults(parser, config)
-    
+
     args = parser.parse_args(argv)
     args.templates = templates
     return args
 
 
-def apply_config_defaults(parser: argparse.ArgumentParser, config: dict[str, Any]) -> None:
+def apply_config_defaults(
+    parser: argparse.ArgumentParser, config: dict[str, Any]
+) -> None:
     """Apply configuration defaults to the argument parser."""
     if not config:
         return
-    
+
     # Get defaults section from config
     defaults = config.get("defaults", {})
-    
+
     # Apply author default
     if "author" in defaults:
         parser.set_defaults(author=defaults["author"])
-    
+
     # Apply year default
     if "year" in defaults:
         parser.set_defaults(year=defaults["year"])
-    
+
     # Apply template default
     if "template" in defaults:
         parser.set_defaults(template=defaults["template"])

@@ -31,7 +31,7 @@ def load_config() -> dict[str, Any]:
     """Load user configuration from disk."""
     config_path = get_config_path()
     user_config_path = get_user_config_path()
-    
+
     # Load from primary config location
     config = {}
     if config_path.exists():
@@ -40,7 +40,7 @@ def load_config() -> dict[str, Any]:
                 config = tomllib.load(f)
         except (tomllib.TOMLDecodeError, OSError) as exc:
             print(f"Warning: Failed to load config file {config_path}: {exc}")
-    
+
     # Load from user config location if it exists
     if user_config_path.exists():
         try:
@@ -50,28 +50,37 @@ def load_config() -> dict[str, Any]:
                 # User config takes precedence
                 config = merge_configs(config, user_config)
         except (tomllib.TOMLDecodeError, OSError) as exc:
-            print(f"Warning: Failed to load user config file {user_config_path}: {exc}")
-    
+            print(
+                f"Warning: Failed to load user config file "
+                f"{user_config_path}: {exc}"
+            )
+
     return config
 
 
-def merge_configs(old_config: dict[str, Any], new_config: dict[str, Any]) -> dict[str, Any]:
-    """Merge two configuration dictionaries, with new_config taking precedence."""
+def merge_configs(
+    old_config: dict[str, Any], new_config: dict[str, Any]
+) -> dict[str, Any]:
+    """Merge two configuration dicts, with new_config taking precedence."""
     result = old_config.copy()
-    
+
     for key, value in new_config.items():
-        if key in result and isinstance(result[key], dict) and isinstance(value, dict):
+        if (
+            key in result
+            and isinstance(result[key], dict)
+            and isinstance(value, dict)
+        ):
             # Recursively merge nested dictionaries
             result[key] = merge_configs(result[key], value)
         else:
             # Overwrite with new value
             result[key] = value
-    
+
     return result
 
 
 def get_default_value(key_path: list[str], config: dict[str, Any]) -> Any:
-    """Get a default value from the configuration using a dot-separated key path."""
+    """Get a default value from the config using a dot-separated key path."""
     value = config
     for key in key_path:
         if not isinstance(value, dict) or key not in value:

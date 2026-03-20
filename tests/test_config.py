@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -31,18 +30,17 @@ class ConfigTests(unittest.TestCase):
             original_path = get_config_path()
             try:
                 config_path = Path(temp_dir) / "config.toml"
-                config_path.write_text(
-                    """
+                config_path.write_text("""
 [defaults]
 author = "Test Author"
 year = 2025
 template = "meson-c-lib"
-"""
-                )
+""")
                 # Monkey-patch the config path for this test
                 import seed_scaffold.config as config_module
+
                 config_module.get_config_path = lambda: config_path
-                
+
                 config = load_config()
                 self.assertEqual(config["defaults"]["author"], "Test Author")
                 self.assertEqual(config["defaults"]["year"], 2025)
@@ -50,6 +48,7 @@ template = "meson-c-lib"
             finally:
                 # Restore original function
                 import seed_scaffold.config as config_module
+
                 config_module.get_config_path = lambda: original_path
 
     def test_load_config_invalid(self) -> None:
